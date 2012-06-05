@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Test" basedir="." default="make_all">
+
+  <!-- Local properties -->
+  <property name="lib.dir" value="${basedir}/libs/"/>
+  <property name="source.web.dir" value="${basedir}"/>
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+  <property name="dist.dir" value="${basedir}"/>
+  <property name="project.name" value="GuestBook"/>
+
+  <target name="init">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes.dir}"/>
+  </target>
+
+  <target name="compile" depends="init" description="compile the source " >
+    <mkdir dir="build/classes"/>
+    <javac destdir="${build.classes.dir}" encoding="UTF-8">
+      <src path="${basedir}"/>
+        <classpath>
+          <fileset dir="${lib.dir}">
+		<include name="*.jar"/>
+          </fileset>
+        </classpath>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile" description="generate the distribution" >
+    <war warfile="${dist.dir}/${project.name}.war"
+         webxml="${basedir}/web.xml">
+      <classes dir="${build.classes.dir}">
+	<include name="mkrishtop/main/*.class"/>
+	<include name="mkrishtop/core/*.class"/>
+	<include name="mkrishtop/tests/*.class"/>
+	<include name="mkrishtop/exception/*.class"/>
+	<include name="mkrishtop/servlet/*.class"/>
+	<include name="mkrishtop/servlet/actions/*.class"/>
+	<include name="mkrishtop/database/*.class"/>
+      </classes>
+	<fileset dir="${basedir}">
+        	<include name="*.jsp"/>
+		<include name="*.properties"/>
+      	</fileset>
+    </war>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="make_all" depends="dist, clean" description="build project" >
+  </target>
+</project>
+
+<!-- ================================================================ -->
